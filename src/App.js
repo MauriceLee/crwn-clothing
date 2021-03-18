@@ -1,5 +1,6 @@
 import React from "react"
 import { Switch, Route } from "react-router-dom"
+import { connect } from "react-redux"
 
 import "./App.css"
 
@@ -7,36 +8,32 @@ import HomePage from "./pages/homepage/homepage.component"
 import ShopPage from "./pages/shop/shop.component"
 import Header from "./components/header/header.component"
 import SignInAndSignUpPage from "./pages/sign-in-and-sign-up/sign-in-and-sign-up.component"
+import { setCurrentUser } from "./redux/user/user.actions"
 
 import { auth, createUserProfileDocument } from "./firebase/firebase.utils"
 
 class App extends React.Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      currentUser: null,
-    }
-  }
-
   unsubscribeFromAuth = null
 
   componentDidMount() {
+    const { setCurrentUser } = this.props
+
+    // 登入時 => 1 3 2, 登出時 => 3
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
       if (userAuth) {
+        // 1
         const userRef = await createUserProfileDocument(userAuth)
 
         userRef.onSnapshot((snapShot) => {
-          this.setState({
-            currentUser: {
-              id: snapShot.id,
-              ...snapShot.data(),
-            },
+          // 2
+          setCurrentUser({
+            id: snapShot.id,
+            ...snapShot.data(),
           })
         })
       }
-
-      this.setState({ currentUser: userAuth })
+      // 3
+      setCurrentUser(userAuth)
     })
   }
 
@@ -58,4 +55,8 @@ class App extends React.Component {
   }
 }
 
-export default App
+const mapDispatchToProps = (dispatch) => ({
+  setCurrentUser: (user) => dispatch(setCurrentUser(user)), // 第一個setCurrentUser對應上面的props, 第二個對應上面的import
+})
+
+export default connect(null, mapDispatchToProps)(App)

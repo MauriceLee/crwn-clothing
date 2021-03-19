@@ -9,3 +9,12 @@ use () =>
 
 1. JSX
 2. function component
+
+use ({}) =>
+
+1. mapStateToProps, mapDispatchToProps, actions.js
+
+
+****************************************************************************************
+
+single object to export use 'export default', than the import do not need to use {}

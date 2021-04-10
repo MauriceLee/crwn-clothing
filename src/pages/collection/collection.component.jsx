@@ -2,15 +2,15 @@ import React from "react";
 
 import CollectionItem from "../../components/collection-item/collection-item.component";
 
-import "./category.styles.scss";
+import "./collection.styles.scss";
 
-const CategoryPage = ({ match }) => {
+const CollectionPage = ({ match }) => {
   console.log(match);
   return (
-    <div className="shop-page">
+    <div className="collection-page">
       <h2>CATEGORY PAGE</h2>
     </div>
   );
 };
 
-export default CategoryPage;
+export default CollectionPage;

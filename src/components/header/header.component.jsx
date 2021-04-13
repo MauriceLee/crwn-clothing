@@ -18,7 +18,7 @@ import {
   LogoContainer,
   OptionsContainer,
   OptionLink,
-  OptionDiv,
+  // OptionDiv,
 } from "./header.styles";
 
 const Header = ({ currentUser, hidden }) => (
@@ -30,7 +30,11 @@ const Header = ({ currentUser, hidden }) => (
       <OptionLink to="/shop">SHOP</OptionLink>
       <OptionLink to="/contact">CONTACT</OptionLink>
       {currentUser ? (
-        <OptionDiv onClick={() => auth.signOut()}>SIGN OUT</OptionDiv>
+        // <OptionDiv onClick={() => auth.signOut()}>SIGN OUT</OptionDiv>
+        // 解決多個標籤共用一個style的另一解法
+        <OptionLink as="div" onClick={() => auth.signOut()}>
+          SIGN OUT
+        </OptionLink>
       ) : (
         <OptionLink to="/signin">SIGN IN</OptionLink>
       )}

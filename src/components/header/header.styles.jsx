@@ -1,0 +1,40 @@
+import styled, { css } from "styled-components"; //當有不同的標籤共用同一個style的時候，就多import css
+import { Link } from "react-router-dom";
+
+//然後把style宣告成一個變數css block
+const OptionContainerStyles = css`
+  padding: 10px 15px;
+  cursor: pointer;
+`;
+
+export const HeaderContainer = styled.div`
+  height: 70px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 25px;
+`;
+
+export const LogoContainer = styled(Link)`
+  height: 100%;
+  width: 70px;
+  padding: 25px;
+`;
+
+export const OptionsContainer = styled.div`
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+`;
+
+//把變數style傳入複用
+export const OptionLink = styled(Link)`
+  ${OptionContainerStyles}
+`;
+
+//把變數style傳入複用
+export const OptionDiv = styled.div`
+  ${OptionContainerStyles}
+`;

@@ -1,53 +1,53 @@
-import React from "react"
-import { Switch, Route, Redirect } from "react-router-dom"
-import { connect } from "react-redux"
-import { createStructuredSelector } from "reselect"
+import React from "react";
+import { Switch, Route, Redirect } from "react-router-dom";
+import { connect } from "react-redux";
+import { createStructuredSelector } from "reselect";
 
-import "./App.css"
+import "./App.css";
 
-import HomePage from "./pages/homepage/homepage.component"
-import ShopPage from "./pages/shop/shop.component"
-import SignInAndSignUpPage from "./pages/sign-in-and-sign-up/sign-in-and-sign-up.component"
-import CheckoutPage from "./pages/checkout/checkout.component"
+import HomePage from "./pages/homepage/homepage.component";
+import ShopPage from "./pages/shop/shop.component";
+import SignInAndSignUpPage from "./pages/sign-in-and-sign-up/sign-in-and-sign-up.component";
+import CheckoutPage from "./pages/checkout/checkout.component";
 
-import Header from "./components/header/header.component"
+import Header from "./components/header/header.component";
 
-import { setCurrentUser } from "./redux/user/user.actions"
-import { selectCurrentUser } from "./redux/user/user.selectors"
+import { setCurrentUser } from "./redux/user/user.actions";
+import { selectCurrentUser } from "./redux/user/user.selectors";
 
-import { auth, createUserProfileDocument } from "./firebase/firebase.utils"
+import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
 
 class App extends React.Component {
-  unsubscribeFromAuth = null
+  unsubscribeFromAuth = null;
 
   componentDidMount() {
-    const { setCurrentUser } = this.props
+    const { setCurrentUser } = this.props;
 
     // 登入時 => 1 3 2, 登出時 => 3
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
       if (userAuth) {
         // 1
-        const userRef = await createUserProfileDocument(userAuth)
+        const userRef = await createUserProfileDocument(userAuth);
 
         userRef.onSnapshot((snapShot) => {
           // 2
           setCurrentUser({
             id: snapShot.id,
             ...snapShot.data(),
-          })
-        })
+          });
+        });
       }
       // 3
-      setCurrentUser(userAuth)
-    })
+      setCurrentUser(userAuth);
+    });
   }
 
   componentWillUnmount() {
-    this.unsubscribeFromAuth()
+    this.unsubscribeFromAuth();
   }
 
   render() {
-    const { currentUser } = this.props
+    const { currentUser } = this.props;
     return (
       <div>
         <Header />
@@ -64,7 +64,7 @@ class App extends React.Component {
           />
         </Switch>
       </div>
-    )
+    );
   }
 }
 
@@ -74,10 +74,10 @@ class App extends React.Component {
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
-})
+});
 
 const mapDispatchToProps = (dispatch) => ({
   setCurrentUser: (user) => dispatch(setCurrentUser(user)), // 第一個setCurrentUser對應上面的props, 第二個對應上面的import
-})
+});
 
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default connect(mapStateToProps, mapDispatchToProps)(App);

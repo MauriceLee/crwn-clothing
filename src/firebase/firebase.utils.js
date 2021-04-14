@@ -1,6 +1,6 @@
-import firebase from "firebase/app"
-import "firebase/firestore"
-import "firebase/auth"
+import firebase from "firebase/app";
+import "firebase/firestore";
+import "firebase/auth";
 
 const config = {
   apiKey: "AIzaSyCek1X_32m-20bSW0ijCYVb4I6DCyWT3Vo",
@@ -10,18 +10,20 @@ const config = {
   messagingSenderId: "480517608884",
   appId: "1:480517608884:web:56877fe32166f9b9ee4ee1",
   measurementId: "G-KBHLMRNMX6",
-}
+};
+
+firebase.initializeApp(config);
 
 export const createUserProfileDocument = async (userAuth, additionalData) => {
-  if (!userAuth) return
+  if (!userAuth) return;
 
-  const userRef = firestore.doc(`users/${userAuth.uid}`)
+  const userRef = firestore.doc(`users/${userAuth.uid}`);
 
-  const snapShot = await userRef.get()
+  const snapShot = await userRef.get();
 
   if (!snapShot.exists) {
-    const { displayName, email } = userAuth
-    const createdAt = new Date()
+    const { displayName, email } = userAuth;
+    const createdAt = new Date();
 
     try {
       await userRef.set({
@@ -29,22 +31,20 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
         email,
         createdAt,
         ...additionalData,
-      })
+      });
     } catch (error) {
-      console.log("error creating user", error.message)
+      console.log("error creating user", error.message);
     }
   }
 
-  return userRef
-}
+  return userRef;
+};
 
-firebase.initializeApp(config)
+export const auth = firebase.auth();
+export const firestore = firebase.firestore();
 
-export const auth = firebase.auth()
-export const firestore = firebase.firestore()
+const provider = new firebase.auth.GoogleAuthProvider();
+provider.setCustomParameters({ prompt: "select_account" });
+export const signInWithGoogle = () => auth.signInWithPopup(provider);
 
-const provider = new firebase.auth.GoogleAuthProvider()
-provider.setCustomParameters({ prompt: "select_account" })
-export const signInWithGoogle = () => auth.signInWithPopup(provider)
-
-export default firebase
+export default firebase;
